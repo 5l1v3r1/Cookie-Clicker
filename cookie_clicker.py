@@ -1,3 +1,4 @@
+#coded by sc1341
 from tkinter import *
 import os #make the folder
 import pickle #save the data 
@@ -5,9 +6,9 @@ import getpass #gets the username from the computer
 import subprocess
 import sys
 from cookie_clicker_GUI import CookieClickerMainGUI
+from cookie_clicker_GUI import UpgradesController
 from image import image
 
-python_file_name = sys.argv[0]
 
 #global variables
 global username  #gets the username for changing directories
@@ -34,8 +35,27 @@ NOTES TO SELF:
 the pack () function can take an arg but it throws an error, you have to tell the widget itself where it should go
 
 
-'''
 
+
+
+QUESTIONS:
+What type of data structure should hold the information regarding that upgrades are enabled?
+THe logic should be done in a way where it does not have to be calculated every single time, rather it should
+hold how much the cookie should go up every time... I also want to log what upgrades are enabled and pickle it
+out to the dat file when we are done with the game... then when the data gets pickled back in we can use a 
+standardized format such as a list, to bring the data back into the game, also make sure to write all of this data
+in a binary format so the user wont be able to tell what is going on so they canot cheat. 
+
+The other upgrades problem, we have to find a way to use one master funciton that controlls the upgrades, maybe they
+should each be an interger, so when we move the data it gets updated... 
+
+Upgrades we want in the program:
+
+Autoclick
+
+Random + 100 cookies (update the small label at the bottom)
+
+'''
 
 def import_data():
     '''Trys to import existing data from the folder, if not, create it with
@@ -56,8 +76,10 @@ def import_data():
                 with open('cookie.dat') as f:
                     data = pickle.load(f)
                     f.close()
+                    break
             else:
                 create_dat_file()
+                break
     except:
         pass
     return data
