@@ -1,15 +1,13 @@
 from tkinter import *
 import os #make the folder
 import pickle #save the data 
-from time import sleep #sleep function
 import getpass #gets the username from the computer
 import subprocess
 import sys
 from cookie_clicker_GUI import CookieClickerMainGUI
+from image import image
 
 python_file_name = sys.argv[0]
-
-
 
 #global variables
 global username  #gets the username for changing directories
@@ -26,7 +24,8 @@ Order things must be run in:
 
 INFO: 
 
-The CookieClickerGUI is the class that runs the GUI, it takes two functions, the root tk() class and the data
+The CookieClickerGUI is the class that runs the GUI, it takes two arguments, the root tk() class (which we 
+defined as root) and the data
 , the data comes from the import_data function where it takes all data and changes the score if the data is present, if 
 not, then the score sets to zero. This program MUST be run on the desktop at the moment
 
@@ -108,7 +107,4 @@ def test_cases():
 
 if __name__ == '__main__':
     main()
-
-
- 
-        
+    test_cases()
