@@ -73,6 +73,7 @@ class CookieClickerMainGUI:
         self.score -= 100 * self.upgrade_controller.auto_click_upgrade
         self.upgrade_controller.auto_click_upgrade += 1
         self.score_label.config(text=str(self.score))
+        #Possibly open a thread here?
         '''
         while True:
             #THis is a known issue that causes the program to freeze than crash, concider time.time?
