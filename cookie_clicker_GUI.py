@@ -36,12 +36,25 @@ class CookieClickerMainGUI:
         
     def check_import_data(self,data):
         '''This checks the data if there was any and updates to the previous SESSION, else it does nothing this is
-        run once in the __init__ method, data is from the .dat file when the class object is created'''
+        run once in the __init__ method, data is from the .dat file when the class object is created, this also formats the data 
+        that comes in from  the file and changes the variables that it needs to'''
         if self.data == '':
             self.score = 0
         else:
-            self.score = int(data)
+            self.score = int(data["score"])
+            self.upgrade_controller.auto_click_upgrade = int(data["auto_click_upgrade"])
+            self.upgrade_controller.cookies_per_click_upgrade = int(data["cookies_per_click_upgrade"])
+            
         return self.score
+    def export_data(self):
+        '''Exports the data into a dictionary into the dat file that was created from the cookie_clicker.py file
+        The format of the export_data is as follows... Score, auto_click_upgrade, cookies_per_click_upgrade'''
+        export_data = {"score":self.score,"auto_click_upgrade":self.upgrade_controller.auto_click_upgrade,
+        "cookies_per_click_upgrade":self.upgrade_controller.cookies_per_click_upgrade}
+        
+        with open('cookie.dat','wb') as f:
+            f.write(export_data)
+        f.close()
 
     def cookie_clicked(self):
         '''Adds to the score when the cookie button is clicked, it then updates the label... the defualt it 
@@ -77,6 +90,7 @@ class CookieClickerMainGUI:
         '''
         while True:
             #THis is a known issue that causes the program to freeze than crash, concider time.time?
-            time.sleep(60-self.upgrade_controller.auto_click_upgrade)
-            self.score += 1'''
+            time1 = time.time()
+            if (sum(time1) + 1) == time.time():    
+                self.score += 1 '''
 
