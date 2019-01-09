@@ -1,17 +1,18 @@
 from tkinter import *
-
+from image import image as cookieimage
 
 class CookieClickerMainGUI:
 
     def __init__(self, root, data=''):
         root.geometry("700x700")
         root.title("Cookie Clicker")
+        self.photo = PhotoImage(data=cookieimage)
         #Inits the score for the game, will change if .dat file exists
         self.score = 0
         self.data = data
         self.score = self.check_data(self.data)
         self.label = Label(root,text="Hello",font=("Helvetica", 16))
-        self.cookie_button = Button(root,text="click me!", command=self.cookie_clicked)
+        self.cookie_button = Button(root,text="click me!", command=self.cookie_clicked, image=self.photo)
         self.upgrades_button = Button(root,text="Upgrades",command=self.upgrades_menu)
         self.score_label = Label(root,text=str(self.score),font=("Helvetica", 20))
 
@@ -30,10 +31,11 @@ class CookieClickerMainGUI:
         return self.score
 
     def cookie_clicked(self):
+        '''Adds to the score when the cookie button is clicked, it then updates the label... the defualt it 
+        the label updates ever 200 milliseconds, do not change this!'''
         self.score += 1
         self.score_label.config(text=str(self.score))
         print("Button clicked: the score is: " + str(self.score))
-        #self.label.after(500, str(score))
 
     def upgrades_menu(self):
         '''This creates a pop-up window to modify your upgrades, it is easy to add things from here'''
@@ -43,8 +45,5 @@ class CookieClickerMainGUI:
         self.auto_click = Button(self.root2, text="Buy Auto-click")
         self.auto_click.pack()
         self.root2.mainloop()
-
-
-
 
 
