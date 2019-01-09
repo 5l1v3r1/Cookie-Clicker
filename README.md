@@ -19,3 +19,26 @@ This class is the main GUI component to the program, it is the main tkinter GUI 
 Known Issues so far:
 
 1. The time.sleep() function does not work in tkinter, there has to be another way to figure out time in the auto-click loop
+
+
+
+Modules Used:
+
+tkinter: GUI Module
+
+os: chdir and mkdir to change directories to the cookie folder that is created
+
+pickle: Exports and imports data from the .dat file
+
+getpass: Gets the username of the current user on the computer so it can be formatted into a string used to change or create directories (ex: C://Users/str(getpass.getuser())/Desktop/)
+
+subprocess: Allows us to use the "ls" command to search for the .dat file by bringing in the data we get back as a list to iterate through
+
+sys: 
+
+from cookie_clicker_GUI import CookieClickerMainGUI: Main GUI class
+
+from cookie_clicker_GUI import UpgradesController: UpgradesController class (see definition/purpose)
+
+from image import image: Base64 encoded image of the cookie (easier to work with in the PhotoImage method, also no extentions)
+
