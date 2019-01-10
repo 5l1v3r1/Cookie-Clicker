@@ -2,19 +2,15 @@
 from tkinter import *
 import os #make the folder
 import pickle #save the data 
-import getpass #gets the username from the computer
+from getpass import getuser #gets the username from the computer
 import subprocess
-import sys
 from cookie_clicker_GUI import CookieClickerMainGUI
 from cookie_clicker_GUI import UpgradesController
-from image import image
-
+#from image import image
 
 #global variables
 global username  #gets the username for changing directories
-username = getpass.getuser()
-
-
+username = getuser()
 '''
 
 INFO: 
@@ -51,15 +47,23 @@ def import_data():
     '''Trys to import existing data from the folder, if not, create it with
     create_dat_file function'''
     data = ''
+    win = False
+    mac = False
+    
     try:
         os.chdir("C://Users/{}/Desktop/cookie_clicked".format(username))
+        win = True
     except:
         try:
             os.chdir("/users/{}/Desktop/cookie_clicked".format(username))
+            mac = True
         except:
             print("Fatal error")
     try:
-        files = subprocess.check_output(['ls'])
+        if mac:    
+            files = subprocess.check_output(['ls'])
+        else:
+            files = subprocess.check_output(['dir'])
         for file in files:
             if file == "cookie.dat":
                 print("Data dump found")
@@ -95,15 +99,35 @@ def change_directory_cookie_folder():
                 os.mkdir("/users/{}/Desktop/cookie_clicked".format(username))
             except FileExistsError:
                 os.chdir("/users/{}/Desktop/cookie_clicked".format(username))
-        
+                
+                
+def check_import_data(data):
+    '''This checks the data if there was any and updates to the previous SESSION, else it does nothing this is
+    run once in the __init__ method, data is from the .dat file when the class object is created, this also formats the data 
+    that comes in from  the file and changes the variables that it needs to'''
+    
+    #escape clause if there is no data, this works because the class does nothing and sets score to zero if ! data
+    if data == '':
+        pass
+    else:
+        score = int(data["score"])
+        GUIObject.upgrade_controller.auto_click_upgrade = int(data["auto_click_upgrade"])
+        GUIObject.upgrade_controller.cookies_per_click_upgrade = int(data["cookies_per_click_upgrade"])
+        parsed_data = None
+    return parsed_data
     
 def main():
     change_directory_cookie_folder()
     data = import_data()
+    parsed_data = check_import_data(data)
     root = Tk()
-    window = CookieClickerMainGUI(root, data)
+    window = CookieClickerMainGUI(root, parsed_data)
     root.mainloop()
 
 
 if __name__ == '__main__':
     main()
+    ''' Psudo code here, not good ot use this aftre the dunder main function but idk we will see what happens
+    while True:
+        time.wait(60)
+        window.export_data()'''
