@@ -2,14 +2,17 @@ from tkinter import *
 from image import image as cookieimage
 import time
 
-
 class UpgradesController:
 
-    def __init__(self, data):
-        #LOGIC TO PARSE DATA GOES HERE
-        self.auto_click_upgrade = 0
-        #This has to be 1 by default because it is used in the cookie_clicked function
-        self.cookies_per_click_upgrade = 1
+    def __init__(self, data): 
+        if data != '':
+            self.score = int(data["score"])
+            self.auto_click_upgrade = int(data["auto_click_upgrade"])
+            self.cookies_per_click_upgrade = int(data["cookies_per_click_upgrade"])
+        else:        
+            self.auto_click_upgrade = 0
+            #All upgrades have to be 1 by default, tis is due to the logic of the game using the upgrade number to determine the cost
+            self.cookies_per_click_upgrade = 1
 
 
 class CookieClickerMainGUI:
@@ -19,6 +22,7 @@ class CookieClickerMainGUI:
         root.geometry("700x700")
         root.title("Cookie Clicker")
         self.photo = PhotoImage(data=cookieimage)
+        
         #Inits the score for the game, will change if .dat file exists
         self.score = 0
         self.data = data
@@ -34,21 +38,11 @@ class CookieClickerMainGUI:
         self.cookie_button.pack()
         self.upgrades_button.pack()
         
-    def check_import_data(self,data):
-        '''This checks the data if there was any and updates to the previous SESSION, else it does nothing this is
-        run once in the __init__ method, data is from the .dat file when the class object is created, this also formats the data 
-        that comes in from  the file and changes the variables that it needs to'''
-        if self.data == '':
-            self.score = 0
-        else:
-            self.score = int(data["score"])
-            self.upgrade_controller.auto_click_upgrade = int(data["auto_click_upgrade"])
-            self.upgrade_controller.cookies_per_click_upgrade = int(data["cookies_per_click_upgrade"])
-            
-        return self.score
+        
     def export_data(self):
         '''Exports the data into a dictionary into the dat file that was created from the cookie_clicker.py file
         The format of the export_data is as follows... Score, auto_click_upgrade, cookies_per_click_upgrade'''
+        
         export_data = {"score":self.score,"auto_click_upgrade":self.upgrade_controller.auto_click_upgrade,
         "cookies_per_click_upgrade":self.upgrade_controller.cookies_per_click_upgrade}
         
@@ -82,7 +76,7 @@ class CookieClickerMainGUI:
 
     def auto_click(self):
         '''Sets the autoclick to run, it subtracts the score by 100 times the number of upgrades that the auto_click 
-        has, it then sets the updatecontroller.aut_click_upgrade += 1'''
+        has, it then sets the updatecontroller.auto_click_upgrade += 1'''
         self.score -= 100 * self.upgrade_controller.auto_click_upgrade
         self.upgrade_controller.auto_click_upgrade += 1
         self.score_label.config(text=str(self.score))
@@ -94,3 +88,17 @@ class CookieClickerMainGUI:
             if (sum(time1) + 1) == time.time():    
                 self.score += 1 '''
 
+
+'''
+Added mac and windows feature so the file check works
+Updated docs
+Removed import_data form the GUI class, it is messy and dumb to do it that way, the data must be parsed before even entering the object
+Removed calloing the export function from the cookie_clicked function because it slows down the program noticlbly to call revusive function in tkinter
+Do not need line 10 in cookie_clicker
+Do not need sys module at the moment in cookie_clicker or the GUI
+
+Problems:
+    the dat file is not creating WTF is happening there?
+    
+
+'''
