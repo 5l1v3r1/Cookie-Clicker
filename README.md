@@ -51,8 +51,6 @@ getpass: Gets the username of the current user on the computer so it can be form
 
 subprocess: Allows us to use the "ls" command to search for the .dat file by bringing in the data we get back as a list to iterate through
 
-sys: 
-
 from cookie_clicker_GUI import CookieClickerMainGUI: Main GUI class
 
 from cookie_clicker_GUI import UpgradesController: UpgradesController class (see definition/purpose)
@@ -72,4 +70,20 @@ export_data
 change_directory_cookie_folder
 
 main
+
+--------------------------------------------------------------
+
+Steps to adding an upgrade feature to the program:
+
+1. Create the upgrade variable in the UpgradeController class and format it as the other ones are
+
+2. Add the variable to be exported in the export data dictoinary
+
+3. Add a line in the if statment when the data is imported so the data will be updated if data exists
+
+4. Create a button for the upgrade option
+
+5. Create a function that takes an effect on the score of the game
+
+
 
