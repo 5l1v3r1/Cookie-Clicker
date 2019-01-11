@@ -33,10 +33,14 @@ def import_data():
             mac = True
         except:
             print("Fatal error")
+    
     if mac:    
         files = subprocess.check_output(['ls'])
-    else:
+    elif win:
         files = subprocess.check_output(['dir'])
+        
+    else:
+        pass
 
     for file in files:
         if str(file) in "cookie.dat":
@@ -73,7 +77,7 @@ def change_directory_cookie_folder():
         except:
             try:
                 os.mkdir("/users/{}/Desktop/cookie_clicked".format(username))
-            except FileExistsError:
+            except:
                 os.chdir("/users/{}/Desktop/cookie_clicked".format(username))
                 
 

@@ -2,6 +2,8 @@ from tkinter import *
 from image import image as cookieimage
 import time
 import pickle
+import random
+import threading
 
 class UpgradesController:
 
@@ -36,6 +38,7 @@ class CookieClickerMainGUI:
         self.upgrades_button = Button(root,text="Upgrades",command=self.upgrades_GUI_menu)
         self.save_button = Button(root,text="Save data",command=self.export_data)
         self.score_label = Label(root,text=str(self.score),font=("Helvetica", 20))
+        self.cookie_debt_label = Label(root,text="You are in cookie debt",font=("Helvetica", 20))
 
         #pack the widgets inside the screen
         self.score_label.pack()
@@ -72,8 +75,12 @@ class CookieClickerMainGUI:
         self.root2 = Tk()
         self.root2.geometry("500x300")
         self.root2.title("Upgrades Menu")
-        self.auto_click_button = Button(self.root2, text="Buy Auto-click", command=self.auto_click)
-        self.cookies_per_click_button = Button(self.root2, text="Buy more cookies per click",command=self.cookies_per_click)
+        self.auto_click_button = Button(self.root2, text="Buy Auto-click: $" + str(100 * self.upgrade_controller.auto_click_upgrade), command=self.auto_click)
+        self.cookies_per_click_button = Button(self.root2, text="Buy more cookies per click: $" + str(20 * self.upgrade_controller.cookies_per_click_upgrade,
+        command=self.cookies_per_click))
+        
+        self.random_bonus_button = Button(self.root2, text="Random Bonus",command=self.random_bonus)
+        #Pack the buttons
         self.cookies_per_click_button.pack()
         self.auto_click_button.pack()
         self.root2.mainloop()
@@ -92,6 +99,7 @@ class CookieClickerMainGUI:
         self.score -= 100 * self.upgrade_controller.auto_click_upgrade
         self.upgrade_controller.auto_click_upgrade += 1
         self.score_label.config(text=str(self.score))
+        t1 = threading.Thread(target=self.auto_click_thread_run)
         #Possibly open a thread here?
         '''
         while True:
@@ -99,8 +107,25 @@ class CookieClickerMainGUI:
             time1 = time.time()
             if (sum(time1) + 1) == time.time():    
                 self.score += 1 '''
-
-
+    def random_bonus(self):
+        '''Random bonus of 1000 cookies, it can only be purchased once'''
+        self.random_bonus_button.pack_forget()
+        while True:
+            if 10 == random.randint(1,100):
+                self.score += 1000
+            
+            
+    def no_negative(self):
+        while True:
+            if self.score < -1000:
+                print("You are in cookie debt")
+                self.cookie_debt_label.pack()
+            else:
+                pass
+    def auto_click_thread_run(self):
+        pass
+                
+    
 '''
 Added mac and windows feature so the file check works
 Updated docs
@@ -111,6 +136,15 @@ Do not need sys module at the moment in cookie_clicker or the GUI
 
 Problems:
     the dat file is not creating WTF is happening there?
+    
+    
+Can we open a sleeper thread that takes a perameter? 
+
+options:
+    thread that uses how many times it was bought to increase price and abilities
+    
+    sleeper thread to run the function normally
+    
     
 
 '''
