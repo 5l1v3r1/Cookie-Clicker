@@ -1,6 +1,7 @@
 from tkinter import *
 from image import image as cookieimage
 import time
+import pickle
 
 class UpgradesController:
 
@@ -9,7 +10,8 @@ class UpgradesController:
             self.score = int(data["score"])
             self.auto_click_upgrade = int(data["auto_click_upgrade"])
             self.cookies_per_click_upgrade = int(data["cookies_per_click_upgrade"])
-        else:        
+        else:
+            self.score = 0        
             self.auto_click_upgrade = 0
             #All upgrades have to be 1 by default, tis is due to the logic of the game using the upgrade number to determine the cost
             self.cookies_per_click_upgrade = 1
@@ -18,18 +20,21 @@ class UpgradesController:
 class CookieClickerMainGUI:
 
     def __init__(self, root, data=''):
+
         self.upgrade_controller = UpgradesController(data)
         root.geometry("700x700")
         root.title("Cookie Clicker")
         self.photo = PhotoImage(data=cookieimage)
         
         #Inits the score for the game, will change if .dat file exists
-        self.score = 0
         self.data = data
-        self.score = self.check_import_data(self.data)
+        self.score = self.upgrade_controller.score
+
+        #inital GUI components
         self.label = Label(root,text="Welcome to Cookie Clicker",font=("Helvetica", 16))
         self.cookie_button = Button(root,text="click me!", command=self.cookie_clicked, image=self.photo)
         self.upgrades_button = Button(root,text="Upgrades",command=self.upgrades_GUI_menu)
+        self.save_button = Button(root,text="Save data",command=self.export_data)
         self.score_label = Label(root,text=str(self.score),font=("Helvetica", 20))
 
         #pack the widgets inside the screen
@@ -37,18 +42,19 @@ class CookieClickerMainGUI:
         self.label.pack()
         self.cookie_button.pack()
         self.upgrades_button.pack()
+        self.save_button.pack()
         
         
     def export_data(self):
-        '''Exports the data into a dictionary into the dat file that was created from the cookie_clicker.py file
-        The format of the export_data is as follows... Score, auto_click_upgrade, cookies_per_click_upgrade'''
+        '''Exports the data into a dictionary into the dat file that was created from the cookie_clicker.py file'''
         
         export_data = {"score":self.score,"auto_click_upgrade":self.upgrade_controller.auto_click_upgrade,
         "cookies_per_click_upgrade":self.upgrade_controller.cookies_per_click_upgrade}
         
         with open('cookie.dat','wb') as f:
-            f.write(export_data)
+            pickle.dump(export_data,f)
         f.close()
+
 
     def cookie_clicked(self):
         '''Adds to the score when the cookie button is clicked, it then updates the label... the defualt it 
@@ -56,6 +62,10 @@ class CookieClickerMainGUI:
         self.score += self.upgrade_controller.cookies_per_click_upgrade
         self.score_label.config(text=str(self.score))
         print("Button clicked: the score is: " + str(self.score))
+
+
+
+    # ----------------------- MENU WINDOWS --------------------------------------------
 
     def upgrades_GUI_menu(self):
         '''This creates a pop-up window to modify your upgrades, it is easy to add more buttons/upgrades from here'''
@@ -68,9 +78,11 @@ class CookieClickerMainGUI:
         self.auto_click_button.pack()
         self.root2.mainloop()
 
+    # ----------------------- UPGRADE FUNCTIONS --------------------------------------------
+
     def cookies_per_click(self):
         '''The number of cookies per click'''
-        self.score -= 20 * self.upgrade_controller.cookies_per_click_upgrade
+        self.score -= 20 * self.upgrade_controller.cookies_per_click_upgrade + 20
         self.upgrade_controller.cookies_per_click_upgrade += 1
         self.score_label.config(text=str(self.score))
 
