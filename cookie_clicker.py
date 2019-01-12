@@ -6,7 +6,6 @@ from getpass import getuser #gets the username from the computer
 import subprocess
 from cookie_clicker_GUI import CookieClickerMainGUI
 from cookie_clicker_GUI import UpgradesController
-#from image import image
 
 #global variables
 global username  #gets the username for changing directories
@@ -36,9 +35,11 @@ def import_data():
     
     if mac:    
         files = subprocess.check_output(['ls'])
+
     elif win:
         files = subprocess.check_output(['dir'])
-        
+        files = files.decode()
+        files = files.split("\n")
     else:
         pass
 
@@ -79,7 +80,6 @@ def change_directory_cookie_folder():
                 os.mkdir("/users/{}/Desktop/cookie_clicked".format(username))
             except:
                 os.chdir("/users/{}/Desktop/cookie_clicked".format(username))
-                
 
 def main():
     change_directory_cookie_folder()
