@@ -12,6 +12,7 @@ class UpgradesController:
             self.score = int(data["score"])
             self.auto_click_upgrade = int(data["auto_click_upgrade"])
             self.cookies_per_click_upgrade = int(data["cookies_per_click_upgrade"])
+            self.random_bonus_upgrade = int(data["random_bonus_upgrade"])
         else:
             self.score = 0        
             self.auto_click_upgrade = 0
@@ -55,7 +56,9 @@ class CookieClickerMainGUI:
         '''Exports the data into a dictionary into the dat file that was created from the cookie_clicker.py file'''
         
         export_data = {"score":self.score,"auto_click_upgrade":self.upgrade_controller.auto_click_upgrade,
-        "cookies_per_click_upgrade":self.upgrade_controller.cookies_per_click_upgrade}
+        "cookies_per_click_upgrade":self.upgrade_controller.cookies_per_click_upgrade,
+        "random_bonus_upgrade":self.upgrade_controller.random_bonus_upgrade}
+        
         
         with open('cookie.dat','wb') as f:
             pickle.dump(export_data,f)
