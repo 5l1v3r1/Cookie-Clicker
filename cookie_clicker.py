@@ -10,9 +10,8 @@ from cookie_clicker_GUI import UpgradesController
 #global variables
 global username  #gets the username for changing directories
 global path
-path = ''
 username = getuser()
-
+path = 'C://Users/{}/Desktop/'.format(username) #default is windows, changed if ! win
 
 def import_data():
     '''Trys to import existing data from the folder, if not, create it with
@@ -35,6 +34,8 @@ def import_data():
     
     if mac:    
         files = subprocess.check_output(['ls'])
+        files = files.decode()
+        files = files.split("\n")
 
     elif win:
         files = subprocess.check_output(['dir'])
@@ -45,14 +46,15 @@ def import_data():
 
     for file in files:
         if str(file) in "cookie.dat":
-            print("Data dump found")
-            with open(path + '/' + 'cookie.dat','rb') as f:
+            try:
+                print("Data dump found")
+                f = open(path + '/' + 'cookie.dat','rb')
                 data = pickle.load(f)
                 f.close()
                 break #This break is important here
-        else:
-            create_dat_file()
-            break
+            except:
+                create_dat_file()
+                break
 
     return data
 
