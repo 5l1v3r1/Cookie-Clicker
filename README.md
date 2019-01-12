@@ -18,23 +18,30 @@ This class is the main GUI component to the program, it is the main tkinter GUI 
 
 Methods of CookieClickerMainGUI:
 
+export_data - exports the data to the dat file when the save button is clicked
 
-check_import_data	
+cookie_clicked - when the big cookie is clicked, this funciton adds to the score
 
-cookie_clicked
+upgrades_GUI_menu - shows the upgrade menu screen to purchase upgrades
 
-upgrades_GUI_menu
+UPGRADE FUNCTIONS ------------
 
-cookies_per_click
+Upgrade functions: these are the funcitons that run when an upgrade is purchased, some of these funcitons run other functions that open threads to add to the score
 
-auto_click
+cookies_per_click - adds the number of cookies added to the score per click by the user
+
+auto_click - This opens a thread in the auto_click_thread_run function that auto-adds to the score when purchaed, this can be bought multiple times, each time it is bought a new thread is opened
+
+random_bonus - this opens a thread in the random_bonus_thread_run funciton, the user has a random chance to get a thousand cookies every second, the user has a 1% chance per thread
+
+no_negative - this displays a message to the user that they are in cookie debt when the score reaches below -1000
 
 ------------------------------------------------------------
 
 
 Known Issues so far:
 
-1. The time.sleep() function does not work in tkinter, there has to be another way to figure out time in the auto-click loop
+:-)
 
 
 ------------------------------------------------------------
@@ -56,6 +63,10 @@ from cookie_clicker_GUI import CookieClickerMainGUI: Main GUI class
 from cookie_clicker_GUI import UpgradesController: UpgradesController class (see definition/purpose)
 
 from image import image: Base64 encoded image of the cookie (easier to work with in the PhotoImage method, also no extentions)
+
+time - allows the threads to sleep and not crash python
+
+threading - allows us to create multiple threads in the program per upgrade
 
 ------------------------------------------------------------
 
@@ -88,18 +99,14 @@ Steps to adding an upgrade feature to the program:
 
 --------------------------------------------------------------
 
-Current problems:
+Current issues:
 
-the cookies will not import at all
-
-the auto click has to go
 
 have to add more upgrades
 
-it overall kinda sucks
-
 make it prettier?
 
+dark mode?
 
 
 
