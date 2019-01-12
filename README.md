@@ -86,4 +86,25 @@ Steps to adding an upgrade feature to the program:
 5. Create a function that takes an effect on the score of the game
 
 
+--------------------------------------------------------------
+
+Current problems:
+
+the cookies will not import at all
+
+the auto click has to go
+
+have to add more upgrades
+
+it overall kinda sucks
+
+make it prettier?
+
+
+
+
+
+
+
+
 
