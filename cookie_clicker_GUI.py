@@ -24,7 +24,7 @@ class UpgradesController:
 class CookieClickerMainGUI:
 
     def __init__(self, root, data=''):
-
+        self.root = root
         self.upgrade_controller = UpgradesController(data)
         root.geometry("700x700")
         root.title("Cookie Clicker")
@@ -36,18 +36,25 @@ class CookieClickerMainGUI:
 
         #inital GUI components
         self.label = Label(root,text="Welcome to Cookie Clicker",font=("Helvetica", 16))
+        self.version_label = Label(root,text="version 1.0",font=("Helvetica",10))
         self.cookie_button = Button(root,text="click me!", command=self.cookie_clicked, image=self.photo)
         self.upgrades_button = Button(root,text="Upgrades",command=self.upgrades_GUI_menu)
         self.save_button = Button(root,text="Save data",command=self.export_data)
-        self.score_label = Label(root,text=str(self.score),font=("Helvetica", 20))
+        self.score_label = Label(root,text=str(self.score),font=("Helvetica", 30))
         self.cookie_debt_label = Label(root,text="You are in cookie debt",font=("Helvetica", 20))
+        self.dark_mode_button = Button(root, text="Dark mode", command=self.dark_mode)
+        self.light_mode_button = Button(root,text="Light mode", command=self.light_mode)
+
+
 
         #pack the widgets inside the screen
         self.score_label.pack()
         self.label.pack()
+        self.version_label.pack()
         self.cookie_button.pack()
         self.upgrades_button.pack()
         self.save_button.pack()
+        self.dark_mode_button.pack()
 
     # ----------------------- EXPORT DATA --------------------------------------------
         
@@ -58,11 +65,35 @@ class CookieClickerMainGUI:
         export_data = {"score":self.score,"auto_click_upgrade":self.upgrade_controller.auto_click_upgrade,
         "cookies_per_click_upgrade":self.upgrade_controller.cookies_per_click_upgrade,
         "random_bonus_upgrade":self.upgrade_controller.random_bonus_upgrade}
-        
+
         
         with open('cookie.dat','wb') as f:
             pickle.dump(export_data,f)
         f.close()
+
+    # ----------------------- Dark mode/light mode --------------------------------------------
+
+    def dark_mode(self):
+        self.dark_mode_button.pack_forget()
+        self.light_mode_button.pack()
+        self.root.config(bg="black")
+        #self.photo.config(bg="black")
+        self.score_label.config(fg="white",bg="black")
+        self.label.config(fg="white",bg="black")
+        self.version_label.config(fg="white",bg="black")
+        self.save_button.config(fg="black",bg="black")
+        self.upgrades_button.config(fg="black",bg="black")
+        self.light_mode_button.config(fg="black",bg="black")
+
+    def light_mode(self):
+        self.dark_mode_button.pack()
+        self.light_mode_button.pack_forget()
+        self.root.config(bg="white")
+        self.score_label.config(fg="black",bg="white")
+        self.label.config(fg="black",bg="white")
+        self.version_label.config(fg="black",bg="white")
+
+
     # ----------------------- MAIN COOKIE CLICKED --------------------------------------------
 
     def cookie_clicked(self):
@@ -123,7 +154,7 @@ class CookieClickerMainGUI:
         
 
     def random_bonus(self):
-        '''Random bonus of 1000 cookies, it can only be purchased once, it costs 10,000 cookies, this function is called when the button is pressed,
+        '''Random bonus of 10000 cookies, it can only be purchased once, it costs 10,000 cookies, this function is called when the button is pressed,
         however it does not actaully do the logic of the random cookie, but rather starts a thread so we can use time.sleep without python crashing'''
         self.score -= 10000
         self.upgrade_controller.random_bonus_upgrade += 1
@@ -144,15 +175,15 @@ class CookieClickerMainGUI:
     # ----------------------- THREADED FUNCTIONS --------------------------------------------
 
     def auto_click_thread_run(self):
-    	while True:
-    		time.sleep(1)
-    		self.score += 1
-    		self.score_label.config(text=str(self.score))
+        while True:
+            time.sleep(1)
+            self.score += 1
+            self.score_label.config(text=str(self.score))
 
     def random_bonus_thread_run(self):
         while True:
             time.sleep(1)
             if 10 == random.randint(1,100):
-                self.score += 1000
-                print("Here are 100 random cookies... yay!")
+                self.score += 10000
+                print("Here are 10000 random cookies... yay!")
     
