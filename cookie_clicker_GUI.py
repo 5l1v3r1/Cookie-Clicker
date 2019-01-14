@@ -209,15 +209,4 @@ class CookieClickerMainGUI:
                 self.score += 10000
                 print("Here are 10000 random cookies... yay!")
 
-    # ----------------------- Use existing upgrades --------------------------------------------
-
-    def apply_existing_upgrades(self):
-        '''Applys all exising upgrades, one bug here is that it still has a cost but its fine for now'''
-
-        for num in range(int(self.auto_click_upgrade)):
-            self.auto_click()
-        for num in range(int(self.cookies_per_click_upgrade)):
-            self.cookies_per_click()
-        for num in range(int(random_bonus_upgrade)):
-            self.random_bonus()
 
