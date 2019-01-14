@@ -16,7 +16,7 @@ class UpgradesController:
         else:
             self.score = 0        
             self.auto_click_upgrade = 0
-            #All upgrades have to be 1 by default, tis is due to the logic of the game using the upgrade number to determine the cost
+            #SOme upgrades have to be 1 by default to have a cost... 
             self.cookies_per_click_upgrade = 1
             self.random_bonus_upgrade = 0
 
@@ -33,6 +33,9 @@ class CookieClickerMainGUI:
         #Inits the score for the game, will change if .dat file exists
         self.data = data
         self.score = self.upgrade_controller.score
+        self.auto_click_upgrade = self.upgrade_controller.auto_click_upgrade
+        self.cookies_per_click_upgrade = self.upgrade_controller.cookies_per_click_upgrade
+        self.random_bonus_upgrade = self.upgrade_controller.random_bonus_upgrade
 
         #inital GUI components
         self.label = Label(root,text="Welcome to Cookie Clicker",font=("Helvetica", 16))
@@ -44,7 +47,7 @@ class CookieClickerMainGUI:
         self.cookie_debt_label = Label(root,text="You are in cookie debt",font=("Helvetica", 20))
         self.dark_mode_button = Button(root, text="Dark mode", command=self.dark_mode)
         self.light_mode_button = Button(root,text="Light mode", command=self.light_mode)
-
+        self.import_upgrades_button = Button(root,text="import data",command=self.import_upgrades)
 
 
         #pack the widgets inside the screen
@@ -55,8 +58,9 @@ class CookieClickerMainGUI:
         self.upgrades_button.pack()
         self.save_button.pack()
         self.dark_mode_button.pack()
+        self.import_upgrades_button.pack()
 
-    # ----------------------- EXPORT DATA --------------------------------------------
+    # ----------------------- IMPORT/EXPORT DATA --------------------------------------------
         
         
     def export_data(self):
@@ -70,6 +74,18 @@ class CookieClickerMainGUI:
         with open('cookie.dat','wb') as f:
             pickle.dump(export_data,f)
         f.close()
+
+    def import_upgrades(self):
+        '''Applys all exising upgrades, one bug here is that it still has a cost but its fine for now'''
+
+        for num in range(int(self.auto_click_upgrade)):
+            self.auto_click()
+        for num in range(int(self.cookies_per_click_upgrade)):
+            self.cookies_per_click()
+        for num in range(int(self.random_bonus_upgrade)):
+            self.random_bonus()
+
+        self.import_upgrades_button.pack_forget()
 
     # ----------------------- Dark mode/light mode --------------------------------------------
 
@@ -149,7 +165,10 @@ class CookieClickerMainGUI:
         self.score_label.config(text=str(self.score))
         t1 = threading.Thread(target=self.auto_click_thread_run)
         t1.start()
-        self.auto_click_button.pack_forget()
+        try:
+            self.auto_click_button.pack_forget()
+        except:
+            pass
 
         
 
@@ -161,7 +180,10 @@ class CookieClickerMainGUI:
         self.score_label.config(text=str(self.score))
         random_thread = threading.Thread(target=self.random_bonus_thread_run)
         random_thread.start()
-        self.random_bonus_button.pack_forget()
+        try:
+            self.random_bonus_button.pack_forget()
+        except:
+            pass
 
             
     def no_negative(self):
@@ -186,4 +208,16 @@ class CookieClickerMainGUI:
             if 10 == random.randint(1,100):
                 self.score += 10000
                 print("Here are 10000 random cookies... yay!")
-    
+
+    # ----------------------- Use existing upgrades --------------------------------------------
+
+    def apply_existing_upgrades(self):
+        '''Applys all exising upgrades, one bug here is that it still has a cost but its fine for now'''
+
+        for num in range(int(self.auto_click_upgrade)):
+            self.auto_click()
+        for num in range(int(self.cookies_per_click_upgrade)):
+            self.cookies_per_click()
+        for num in range(int(random_bonus_upgrade)):
+            self.random_bonus()
+
