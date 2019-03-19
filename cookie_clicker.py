@@ -1,5 +1,4 @@
 #coded by sc1341
-from tkinter import *
 import os #make the folder
 import pickle #save the data 
 from getpass import getuser #gets the username from the computer
@@ -21,13 +20,13 @@ def import_data():
     mac = False
     
     try:
-        os.chdir("C://Users/{}/Desktop/cookie_clicked".format(username))
-        path = "C://Users/{}/Desktop/cookie_clicked".format(username)
+        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(username))
+        path = "C://Users/{}/Desktop/cookie_clicker".format(username)
         win = True
     except:
         try:
-            os.chdir("/users/{}/Desktop/cookie_clicked".format(username))
-            path = "/users/{}/Desktop/cookie_clicked".format(username)
+            os.chdir("/users/{}/Desktop/cookie_clicker".format(username))
+            path = "/users/{}/Desktop/cookie_clicker".format(username)
             mac = True
         except:
             print("Fatal error")
@@ -38,9 +37,12 @@ def import_data():
         files = files.split("\n")
 
     elif win:
-        files = subprocess.check_output(['dir'])
-        files = files.decode()
-        files = files.split("\n")
+        try:
+            files = subprocess.check_output(['dir'])
+            files = files.decode()
+            files = files.split("\n")
+        except:
+            files = []
     else:
         pass
 
@@ -73,15 +75,15 @@ def change_directory_cookie_folder():
     '''works on mac and windows, changes the directory to the cookie folder, if dir does not exist
     it creates it, it supports the file structures of mac and windows'''
     try:
-        os.chdir("C://Users/{}/Desktop/cookie_clicked".format(username))
+        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(username))
     except:
         try:
-            os.mkdir("C://Users/{}/Desktop/cookie_clicked".format(username))
+            os.mkdir("C://Users/{}/Desktop/cookie_clicker".format(username))
         except:
             try:
-                os.mkdir("/users/{}/Desktop/cookie_clicked".format(username))
+                os.mkdir("/users/{}/Desktop/cookie_clicker".format(username))
             except:
-                os.chdir("/users/{}/Desktop/cookie_clicked".format(username))
+                os.chdir("/users/{}/Desktop/cookie_clicker".format(username))
 
 def main():
     change_directory_cookie_folder()
