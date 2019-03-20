@@ -1,16 +1,17 @@
 #coded by sc1341
-import os #make the folder
-import pickle #save the data 
-from getpass import getuser #gets the username from the computer
+import os
+import pickle
+from getpass import getuser
 import subprocess
 from cookie_clicker_GUI import CookieClickerMainGUI
+from tkinter import *
 from cookie_clicker_GUI import UpgradesController
 
-#global variables
-global username  #gets the username for changing directories
+#global variable
 global path
-username = getuser()
-path = 'C://Users/{}/Desktop/'.format(username) #default is windows, changed if ! win
+
+#default is windows, changed if ! win
+path = 'C://Users/{}/Desktop/'.format(getuser())
 
 def import_data():
     '''Trys to import existing data from the folder, if not, create it with
@@ -20,13 +21,13 @@ def import_data():
     mac = False
     
     try:
-        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(username))
-        path = "C://Users/{}/Desktop/cookie_clicker".format(username)
+        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(getuser()))
+        path = "C://Users/{}/Desktop/cookie_clicker".format(getuser())
         win = True
     except:
         try:
-            os.chdir("/users/{}/Desktop/cookie_clicker".format(username))
-            path = "/users/{}/Desktop/cookie_clicker".format(username)
+            os.chdir("/users/{}/Desktop/cookie_clicker".format(getuser()))
+            path = "/users/{}/Desktop/cookie_clicker".format(getuser())
             mac = True
         except:
             print("Fatal error")
@@ -46,6 +47,7 @@ def import_data():
     else:
         pass
 
+    #There is no way that this works
     for file in files:
         if str(file) in "cookie.dat":
             try:
@@ -53,7 +55,7 @@ def import_data():
                 f = open(path + '/' + 'cookie.dat','rb')
                 data = pickle.load(f)
                 f.close()
-                break #This break is important here
+                break
             except:
                 create_dat_file()
                 break
@@ -61,12 +63,27 @@ def import_data():
     return data
 
 
+class FileManager:
+
+    def __init__(self):
+        self.path = os.cwd()
+        self.win = False
+        self.mac = False
+
+
+    def create_dat_file(self):
+        '''Creates the dat file on the machine'''
+        pass
+
+    def find_dat_file(self):
+        '''Finds the dat file on the machine and reads the data from it, it return the data in a dictionary format?'''
+        pass
+
 def create_dat_file():
     '''Creates the dat file for exporting and importing'''
     try:
-        f = open(path + '/' + 'cookie.dat','wb')
+        f = open(path + '/' + 'cookie.dat', 'wb')
         f.close()
-        print("file created")
     except:
         pass
       
@@ -75,15 +92,15 @@ def change_directory_cookie_folder():
     '''works on mac and windows, changes the directory to the cookie folder, if dir does not exist
     it creates it, it supports the file structures of mac and windows'''
     try:
-        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(username))
+        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(getuser()))
     except:
         try:
-            os.mkdir("C://Users/{}/Desktop/cookie_clicker".format(username))
+            os.mkdir("C://Users/{}/Desktop/cookie_clicker".format(getuser()))
         except:
             try:
-                os.mkdir("/users/{}/Desktop/cookie_clicker".format(username))
+                os.mkdir("/users/{}/Desktop/cookie_clicker".format(getuser()))
             except:
-                os.chdir("/users/{}/Desktop/cookie_clicker".format(username))
+                os.chdir("/users/{}/Desktop/cookie_clicker".format(getuser()))
 
 def main():
     change_directory_cookie_folder()

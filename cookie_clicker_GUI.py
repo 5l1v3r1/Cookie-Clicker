@@ -94,7 +94,7 @@ class CookieClickerMainGUI:
     def dark_mode(self):
         self.dark_mode_button.pack_forget()
         self.light_mode_button.pack()
-        self.root.config(bg="black", fg="white")
+        self.root.config(bg="black")
         #self.photo.config(bg="black")
         self.score_label.config(fg="white",bg="black")
         self.label.config(fg="white",bg="black")
@@ -107,9 +107,11 @@ class CookieClickerMainGUI:
         self.dark_mode_button.pack()
         self.light_mode_button.pack_forget()
         self.root.config(bg="white")
-        self.score_label.config(fg="black",bg="white")
-        self.label.config(fg="black",bg="white")
-        self.version_label.config(fg="black",bg="white")
+        self.score_label.config(fg="black", bg="white")
+        self.save_button.config(fg="black", bg="white")
+        self.upgrades_button.config(fg="black", bg="white")
+        self.label.config(fg="black", bg="white")
+        self.version_label.config(fg="black", bg="white")
 
 
     # ----------------------- MAIN COOKIE CLICKED --------------------------------------------
