@@ -86,8 +86,22 @@ Methods:
 Current issues:
 
 Threads all need to stop on exit of the program
+
 Data not correctly importing, concider revising the structure of the UpgradesController class
+
 Subprocess not working on windows, we now assume that the platform is windows for the data to be imported, if the system is not a windows machine, then it just returns data as a blank string.
+
+Add easter egg
+
+Clean up code
+
+Write better Doc Strings
+
+Make the Upgrade Menu better
+
+Overall, clean GUI, perhaps add some customization to the cookie screen.
+
+Modify the way the data is passed into the upgrades controller button and add a feature in the main class that applys those upgrades to program.
 
 
 
