@@ -48,15 +48,13 @@ Known Issues so far:
 
 Modules Used:
 
-tkinter: GUI Module
+tkinter: GUI Module, the entire tkinter library is not imported because we don't need all of it...
 
 os: chdir and mkdir to change directories to the cookie folder that is created
 
 pickle: Exports and imports data from the .dat file
 
-getpass: Gets the username of the current user on the computer so it can be formatted into a string used to change or create directories (ex: C://Users/str(getpass.getuser())/Desktop/)
-
-subprocess: Allows us to use the "ls" command to search for the .dat file by bringing in the data we get back as a list to iterate through
+getpass.getuser() -- Gets the username of the user on the computer so that the program can move around the directory structure easily
 
 from cookie_clicker_GUI import CookieClickerMainGUI: Main GUI class
 
@@ -70,46 +68,26 @@ threading - allows us to create multiple threads in the program per upgrade
 
 ------------------------------------------------------------
 
-Functions of cookie_clicker.py:
+Classes of Cookieclicker.py
 
-import_data
 
-create_dat_file
+class Filemanager
+Methods:
+1. __init__ -- Sets a few of the variables and changes the wd to Desktop
+2. create_dat_file -- Creates the dat file inside of the folder so that game data can be saved
+3. make_directory -- Makes the folder on the desktop that holds the cookie_clicker.dat file
+4. import_data -- Gets the data from the cookie.dat file
 
-export_data
 
-change_directory_cookie_folder
-
-main
-
---------------------------------------------------------------
-
-Steps to adding an upgrade feature to the program:
-
-1. Create the upgrade variable in the UpgradeController class and format it as the other ones are
-
-2. Add the variable to be exported in the export data dictoinary
-
-3. Add a line in the if statment when the data is imported so the data will be updated if data exists
-
-4. Create a button for the upgrade option
-
-5. Create a function that takes an effect on the score of the game
 
 
 --------------------------------------------------------------
 
 Current issues:
 
-
-have to add more upgrades
-
-make it prettier?
-
-dark mode?
-
-
-
+Threads all need to stop on exit of the program
+Data not correctly importing, concider revising the structure of the UpgradesController class
+Subprocess not working on windows, we now assume that the platform is windows for the data to be imported, if the system is not a windows machine, then it just returns data as a blank string.
 
 
 
