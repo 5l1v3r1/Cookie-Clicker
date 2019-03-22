@@ -49,11 +49,12 @@ class CookieClickerMainGUI:
         self.upgrades_button = Button(self.root, text="Upgrades", command=self.upgrades_GUI_menu, font=("Helvetica", 10))
         self.save_button = Button(self.root, text="Save data", command=self.export_data, font=("Helvetica",10))
         self.score_label = Label(self.root, text=str(self.score), font=("Helvetica", 30))
-        self.cookie_debt_label = Label(self.root,text="You are in cookie debt",font=("Helvetica", 20))
+        #self.cookie_debt_label = Label(self.root,text="You are in cookie debt",font=("Helvetica", 20))
         self.dark_mode_button = Button(self.root, text="Dark mode", command=self.dark_mode, font=("Helvetica", 10))
         self.light_mode_button = Button(self.root,text="Light mode", command=self.light_mode, font=("Helvetica", 10))
-        self.import_upgrades_button = Button(self.root,text="import data", command=self.import_upgrades, font=("Helvetica", 10))
-
+        
+        #import the data
+        self.import_upgrades()
 
         #pack the widgets inside the screen
         self.score_label.pack()
@@ -63,9 +64,12 @@ class CookieClickerMainGUI:
         self.upgrades_button.pack()
         self.save_button.pack()
         self.dark_mode_button.pack()
-        self.import_upgrades_button.pack()
         logging.info("Screen initialized")
+        
+        #Exit protocol
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        
+        #main loop
         self.root.mainloop()
 
     # ----------------------- IMPORT/EXPORT DATA --------------------------------------------
@@ -96,8 +100,6 @@ class CookieClickerMainGUI:
         for num in range(int(self.random_bonus_upgrade)):
             self.random_bonus()
             self.score += 10000
-
-        self.import_upgrades_button.pack_forget()
 
     # ----------------------- Dark mode/light mode --------------------------------------------
 
@@ -151,11 +153,11 @@ class CookieClickerMainGUI:
 
         #Buttons
 
-        self.auto_click_button = Button(self.root2, text=auto_click_price, command=self.auto_click)
+        self.auto_click_button = Button(self.root2, text=self.auto_click_price, command=self.auto_click)
 
-        self.cookies_per_click_button = Button(self.root2, text=cookies_per_click_price,command=self.cookies_per_click)
+        self.cookies_per_click_button = Button(self.root2, text=self.cookies_per_click_price,command=self.cookies_per_click)
         
-        self.random_bonus_button = Button(self.root2, text=random_bonus_price,command=self.random_bonus)
+        self.random_bonus_button = Button(self.root2, text=self.random_bonus_price,command=self.random_bonus)
         #Pack the buttons
         self.cookies_per_click_button.pack()
         self.auto_click_button.pack()
@@ -180,15 +182,14 @@ class CookieClickerMainGUI:
         t1 = threading.Thread(target=self.auto_click_thread_run)
         self.thread_list.append(t1)
         t1.start()
+        #Why????????????????????????
         try:
             self.auto_click_button.pack_forget()
         except:
             pass
 
-
-
     def random_bonus(self):
-        '''Random bonus of 10000 cookies, it can only be purchased once, it costs 10,000 cookies, this function is called when the button is pressed,
+        '''Random bonus of 10,000 cookies, it can only be purchased once, it costs 10,000 cookies, this function is called when the button is pressed,
         however it does not actaully do the logic of the random cookie, but rather starts a thread so we can use time.sleep without python crashing'''
         self.score -= 10000
         self.upgrade_controller.random_bonus_upgrade += 1
@@ -196,11 +197,11 @@ class CookieClickerMainGUI:
         random_thread = threading.Thread(target=self.random_bonus_thread_run)
         self.thread_list.append(random_thread)
         random_thread.start()
+        #Why did I do this????????????????????????
         try:
             self.random_bonus_button.pack_forget()
         except:
             pass
-
 
     # ----------------------- THREADED FUNCTIONS --------------------------------------------
 
