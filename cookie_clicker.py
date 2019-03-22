@@ -1,115 +1,61 @@
-#coded by sc1341
+# coded by sc1341
 import os
 import pickle
 from getpass import getuser
-import subprocess
+import logging
 from cookie_clicker_GUI import CookieClickerMainGUI
-from tkinter import *
-from cookie_clicker_GUI import UpgradesController
 
-#global variable
-global path
-
-#default is windows, changed if ! win
-path = 'C://Users/{}/Desktop/'.format(getuser())
-
-def import_data():
-    '''Trys to import existing data from the folder, if not, create it with
-    create_dat_file function'''
-    data = ''
-    win = False
-    mac = False
-    
-    try:
-        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(getuser()))
-        path = "C://Users/{}/Desktop/cookie_clicker".format(getuser())
-        win = True
-    except:
-        try:
-            os.chdir("/users/{}/Desktop/cookie_clicker".format(getuser()))
-            path = "/users/{}/Desktop/cookie_clicker".format(getuser())
-            mac = True
-        except:
-            print("Fatal error")
-    
-    if mac:    
-        files = subprocess.check_output(['ls'])
-        files = files.decode()
-        files = files.split("\n")
-
-    elif win:
-        try:
-            files = subprocess.check_output(['dir'])
-            files = files.decode()
-            files = files.split("\n")
-        except:
-            files = []
-    else:
-        pass
-
-    #There is no way that this works
-    for file in files:
-        if str(file) in "cookie.dat":
-            try:
-                print("Data dump found")
-                f = open(path + '/' + 'cookie.dat','rb')
-                data = pickle.load(f)
-                f.close()
-                break
-            except:
-                create_dat_file()
-                break
-
-    return data
 
 
 class FileManager:
 
     def __init__(self):
-        self.path = os.cwd()
-        self.win = False
-        self.mac = False
-
+        self.path = "C://Users/" + getuser() + "/Desktop"
+        os.chdir("C://Users/" + getuser() + "/Desktop")
+        logging.basicConfig(filename="cookielogs.log", level=logging.INFO)
 
     def create_dat_file(self):
-        '''Creates the dat file on the machine'''
-        pass
-
-    def find_dat_file(self):
-        '''Finds the dat file on the machine and reads the data from it, it return the data in a dictionary format?'''
-        pass
-
-def create_dat_file():
-    '''Creates the dat file for exporting and importing'''
-    try:
-        f = open(path + '/' + 'cookie.dat', 'wb')
-        f.close()
-    except:
-        pass
-      
-
-def change_directory_cookie_folder():
-    '''works on mac and windows, changes the directory to the cookie folder, if dir does not exist
-    it creates it, it supports the file structures of mac and windows'''
-    try:
-        os.chdir("C://Users/{}/Desktop/cookie_clicker".format(getuser()))
-    except:
+        '''Creates the dat file on the machine, this function also assumes that the folder already exists'''
         try:
-            os.mkdir("C://Users/{}/Desktop/cookie_clicker".format(getuser()))
-        except:
+            f = open(self.path + "/cookie_clicker" + "cookie.dat", "wb")
+            f.close()
+            logging.info("Creating file inside of existing cookie folder")
+        except FileNotFoundError:
+            os.mkdir(self.path + "/cookie_clicker")
+            logging.info("Created folder")
+
+    def make_directory(self):
+        '''Makes the folder, this is a seperate function because it is called only when the file and the
+        folder both do not exist'''
+        os.mkdir(self.path + "/cookie_clicker")
+        os.chdir(self.path + "/cookie_clicker")
+
+    def import_data(self):
+        '''Imports the data from the existing dat file on the folder on the desktop'''
+        logging.info("Locating data")
+        try:
+            os.chdir(self.path + "/cookie_clicker")
             try:
-                os.mkdir("/users/{}/Desktop/cookie_clicker".format(getuser()))
-            except:
-                os.chdir("/users/{}/Desktop/cookie_clicker".format(getuser()))
+                with open("cookie.dat","rb") as f:
+                    data = f.read()
+                    data = data.decode()
+                return data
+            except FileNotFoundError:
+                logging.info("Folder exists, but the file was not found")
+                self.create_dat_file()
+                return ''
+        except FileNotFoundError:
+            logging.info("Folder and dat file does not exist... creating folder and file")
+            self.make_directory()
+            self.create_dat_file()
+            return ''
+
+
 
 def main():
-    change_directory_cookie_folder()
-    data = import_data()
-    root = Tk()
-    GUI = CookieClickerMainGUI(root, data)
-    root.mainloop()
+    fileman = FileManager()
+    GUI = CookieClickerMainGUI(fileman.import_data())
 
 
 if __name__ == '__main__':
     main()
-

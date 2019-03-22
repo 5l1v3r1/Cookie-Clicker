@@ -1,9 +1,12 @@
-from tkinter import Button, Label, Tk, PhotoImage
+from tkinter import Button, Label, Tk, PhotoImage, messagebox
 from image import image as cookieimage
 import time
 import pickle
 import random
 import threading
+import logging
+import os
+from getpass import getuser
 
 class UpgradesController:
 
@@ -23,30 +26,33 @@ class UpgradesController:
 
 class CookieClickerMainGUI:
 
-    def __init__(self, root, data=''):
-        self.root = root
+    def __init__(self, data=''):
+        self.root = Tk()
         self.upgrade_controller = UpgradesController(data)
-        root.geometry("700x700")
-        root.title("Cookie Clicker")
+        self.root.geometry("700x700")
+        self.root.title("Cookie Clicker")
         self.photo = PhotoImage(data=cookieimage)
-        
+        logging.basicConfig(filename="cookielogs.log", level=logging.INFO)
+        self.path = "C://Users/" + getuser() + "/Desktop/cookie_clicker"
+        os.chdir(self.path)
         #Inits the score for the game, will change if .dat file exists
         self.score = self.upgrade_controller.score
         self.auto_click_upgrade = self.upgrade_controller.auto_click_upgrade
         self.cookies_per_click_upgrade = self.upgrade_controller.cookies_per_click_upgrade
         self.random_bonus_upgrade = self.upgrade_controller.random_bonus_upgrade
+        self.thread_list = []
 
         #inital GUI components
-        self.label = Label(root,text="Welcome to Cookie Clicker",font=("Helvetica", 16))
-        self.version_label = Label(root,text="version 1.0",font=("Helvetica",10))
-        self.cookie_button = Button(root,text="click me!", command=self.cookie_clicked, image=self.photo)
-        self.upgrades_button = Button(root,text="Upgrades",command=self.upgrades_GUI_menu, font=("Helvetica",10))
-        self.save_button = Button(root,text="Save data",command=self.export_data, font=("Helvetica",10))
-        self.score_label = Label(root,text=str(self.score),font=("Helvetica", 30))
-        self.cookie_debt_label = Label(root,text="You are in cookie debt",font=("Helvetica", 20))
-        self.dark_mode_button = Button(root, text="Dark mode", command=self.dark_mode, font=("Helvetica",10))
-        self.light_mode_button = Button(root,text="Light mode", command=self.light_mode, font=("Helvetica",10))
-        self.import_upgrades_button = Button(root,text="import data",command=self.import_upgrades, font=("Helvetica",10))
+        self.label = Label(self.root, text="Welcome to Cookie Clicker", font=("Helvetica", 16))
+        self.version_label = Label(self.root, text="version 1.0", font=("Helvetica", 10))
+        self.cookie_button = Button(self.root,text="click me!", command=self.cookie_clicked, image=self.photo)
+        self.upgrades_button = Button(self.root, text="Upgrades", command=self.upgrades_GUI_menu, font=("Helvetica", 10))
+        self.save_button = Button(self.root, text="Save data", command=self.export_data, font=("Helvetica",10))
+        self.score_label = Label(self.root, text=str(self.score), font=("Helvetica", 30))
+        self.cookie_debt_label = Label(self.root,text="You are in cookie debt",font=("Helvetica", 20))
+        self.dark_mode_button = Button(self.root, text="Dark mode", command=self.dark_mode, font=("Helvetica", 10))
+        self.light_mode_button = Button(self.root,text="Light mode", command=self.light_mode, font=("Helvetica", 10))
+        self.import_upgrades_button = Button(self.root,text="import data", command=self.import_upgrades, font=("Helvetica", 10))
 
 
         #pack the widgets inside the screen
@@ -58,6 +64,9 @@ class CookieClickerMainGUI:
         self.save_button.pack()
         self.dark_mode_button.pack()
         self.import_upgrades_button.pack()
+        logging.info("Screen initialized")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.root.mainloop()
 
     # ----------------------- IMPORT/EXPORT DATA --------------------------------------------
         
@@ -72,6 +81,7 @@ class CookieClickerMainGUI:
         with open('cookie.dat','wb') as f:
             pickle.dump(export_data,f)
         f.close()
+        logging.info("Exported data to dat")
 
     def import_upgrades(self):
         '''Applies all existing upgrades, it then adds back the cookies that the user gets refunded because they don't have to
@@ -102,6 +112,7 @@ class CookieClickerMainGUI:
         self.save_button.config(fg="white",bg="black")
         self.upgrades_button.config(fg="white",bg="black")
         self.light_mode_button.config(fg="white",bg="black")
+        logging.info("Dark mode on")
 
     def light_mode(self):
         self.dark_mode_button.pack()
@@ -112,7 +123,7 @@ class CookieClickerMainGUI:
         self.upgrades_button.config(fg="black", bg="white")
         self.label.config(fg="black", bg="white")
         self.version_label.config(fg="black", bg="white")
-
+        logging.info("Light mode on")
 
     # ----------------------- MAIN COOKIE CLICKED --------------------------------------------
 
@@ -167,13 +178,14 @@ class CookieClickerMainGUI:
         self.upgrade_controller.auto_click_upgrade += 1
         self.score_label.config(text=str(self.score))
         t1 = threading.Thread(target=self.auto_click_thread_run)
+        self.thread_list.append(t1)
         t1.start()
         try:
             self.auto_click_button.pack_forget()
         except:
             pass
 
-        
+
 
     def random_bonus(self):
         '''Random bonus of 10000 cookies, it can only be purchased once, it costs 10,000 cookies, this function is called when the button is pressed,
@@ -182,6 +194,7 @@ class CookieClickerMainGUI:
         self.upgrade_controller.random_bonus_upgrade += 1
         self.score_label.config(text=str(self.score))
         random_thread = threading.Thread(target=self.random_bonus_thread_run)
+        self.thread_list.append(random_thread)
         random_thread.start()
         try:
             self.random_bonus_button.pack_forget()
@@ -206,3 +219,8 @@ class CookieClickerMainGUI:
                 print("Here are 10000 random cookies... yay!")
 
 
+    # -------------------------------- Exit function ----------------
+    def on_closing(self):
+        '''On the exit, the threads get killed
+        https://christopherdavis.me/blog/threading-basics.html'''
+        pass
