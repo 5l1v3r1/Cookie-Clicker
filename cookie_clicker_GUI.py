@@ -5,6 +5,7 @@ import pickle
 import random
 import threading
 import logging
+import sys
 import os
 from getpass import getuser
 
@@ -164,6 +165,10 @@ class CookieClickerMainGUI:
         self.random_bonus_button.pack()
         self.root2.mainloop()
 
+
+    def change_backround_GUI(self):
+        pass
+
     # ----------------------- UPGRADE FUNCTIONS --------------------------------------------
 
     def cookies_per_click(self):
@@ -224,4 +229,4 @@ class CookieClickerMainGUI:
     def on_closing(self):
         '''On the exit, the threads get killed
         https://christopherdavis.me/blog/threading-basics.html'''
-        pass
+        sys.exit()

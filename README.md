@@ -36,12 +36,6 @@ random_bonus - this opens a thread in the random_bonus_thread_run funciton, the 
 
 no_negative - this displays a message to the user that they are in cookie debt when the score reaches below -1000
 
-------------------------------------------------------------
-
-
-Known Issues so far:
-
-:-)
 
 
 ------------------------------------------------------------
