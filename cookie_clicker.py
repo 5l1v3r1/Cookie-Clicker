@@ -25,8 +25,8 @@ class FileManager:
             logging.info("Created folder")
 
     def make_directory(self):
-        '''Makes the folder, this is a seperate function because it is called only when the file and the
-        folder both do not exist'''
+        """Makes the folder, this is a seperate function because it is called only when the file and the
+        folder both do not exist"""
         os.mkdir(self.path + "/cookie_clicker")
         os.chdir(self.path + "/cookie_clicker")
 
@@ -36,9 +36,9 @@ class FileManager:
         try:
             os.chdir(self.path + "/cookie_clicker")
             try:
-                with open("cookie.dat","rb") as f:
-                    data = f.read()
-                    data = data.decode()
+                with open("cookie.dat", "rb") as f:
+                    #Errors here???
+                    data = pickle.load(f)
                 return data
             except FileNotFoundError:
                 logging.info("Folder exists, but the file was not found")
