@@ -1,15 +1,13 @@
 # Cookie-Clicker
 Computer Science Principles sem 1 final exam project
 
-Structure of the progam:
+Structure of the program:
 
 Cookie_clicker.py is the main project where the main function is run. The cookie_clicker_GUI.py file holds the classes we need to make the GUI run on the program. There are two classes stored in there...
 
-1. UpgradesController 
+1. UpgradesController
 
-UpgradesController helps us keep track of all of the upgrades that the player has bought in the menu, evertime the button is pressed, the command argument calls the specified function and it runs. Every function that is an upgrade function is denoted with the title of the upgrade (ex: auto_click). In those functions, another variable is changed, these variables hold the number of times that the upgrade has been clicked, changing the effect of the number of cookies. These special variables are stored in the classs UpgradesController. They are first initialzed with the __init__ method so that existing user data from the .dat file can be parsed and the variables can be changed accordingly to the number of upgrades that the user had from previous sessions. All of these variables can be found with the name of the upgrade followed by _upgrade (ex auto_click_upgrade)
-
-
+UpgradesController helps us keep track of all of the upgrades that the player has bought in the menu, every time the button is pressed, the command argument calls the specified function and it runs. Every function that is an upgrade function is denoted with the title of the upgrade (ex: auto_click). In those functions, another variable is changed, these variables hold the number of times that the upgrade has been clicked, changing the effect of the number of cookies. These special variables are stored in the class UpgradesController. They are first initialized with the __init__ method so that existing user data from the .dat file can be parsed and the variables can be changed accordingly to the number of upgrades that the user had from previous sessions. All of these variables can be found with the name of the upgrade followed by _upgrade (ex auto_click_upgrade)
 
 2. CookieClickerMainGUI
 
@@ -20,19 +18,19 @@ Methods of CookieClickerMainGUI:
 
 export_data - exports the data to the dat file when the save button is clicked
 
-cookie_clicked - when the big cookie is clicked, this funciton adds to the score
+cookie_clicked - when the big cookie is clicked, this function adds to the score
 
 upgrades_GUI_menu - shows the upgrade menu screen to purchase upgrades
 
 UPGRADE FUNCTIONS ------------
 
-Upgrade functions: these are the funcitons that run when an upgrade is purchased, some of these funcitons run other functions that open threads to add to the score
+Upgrade functions: these are the functions that run when an upgrade is purchased, some of these functions run other functions that open threads to add to the score
 
 cookies_per_click - adds the number of cookies added to the score per click by the user
 
-auto_click - This opens a thread in the auto_click_thread_run function that auto-adds to the score when purchaed, this can be bought multiple times, each time it is bought a new thread is opened
+auto_click - This opens a thread in the auto_click_thread_run function that auto-adds to the score when purchased, this can be bought multiple times, each time it is bought a new thread is opened
 
-random_bonus - this opens a thread in the random_bonus_thread_run funciton, the user has a random chance to get a thousand cookies every second, the user has a 1% chance per thread
+random_bonus - this opens a thread in the random_bonus_thread_run function, the user has a random chance to get a thousand cookies every second, the user has a 1% chance per thread
 
 no_negative - this displays a message to the user that they are in cookie debt when the score reaches below -1000
 
@@ -79,25 +77,23 @@ Methods:
 
 Current issues:
 
-Threads all need to stop on exit of the program
-
-Data not correctly importing, concider revising the structure of the UpgradesController class
-
-Subprocess not working on windows, we now assume that the platform is windows for the data to be imported, if the system is not a windows machine, then it just returns data as a blank string.
-
 Add easter egg
 
-Clean up code
 
 Write better Doc Strings
 
-Make the Upgrade Menu better
+Customization
 
-Overall, clean GUI, perhaps add some customization to the cookie screen.
+Figure out how to close all of the threads running on the machine..
 
-Modify the way the data is passed into the upgrades controller button and add a feature in the main class that applys those upgrades to program.
-
-
-
+.join()? ._Thread_stop()?
+Idk how to fix this rn
 
 
+
+
+# To do:
+Finish Customizaiton Screen
+Current issue list
+Write better doc Strings
+Choose what algorithm that you want to showcase for the final

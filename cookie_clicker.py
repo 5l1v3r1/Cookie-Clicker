@@ -4,14 +4,19 @@ import pickle
 from getpass import getuser
 import logging
 from cookie_clicker_GUI import CookieClickerMainGUI
-
+import platform
 
 
 class FileManager:
 
     def __init__(self):
-        self.path = "C://Users/" + getuser() + "/Desktop"
-        os.chdir("C://Users/" + getuser() + "/Desktop")
+        #Finds out if the filesystem is windows or not
+        if platform.system() == "Windows":
+            self.windows = True
+            self.path = f"C://Users/{getuser()}/Desktop"
+        else:
+            self.path = f"/users/{getuser()}/Desktop"
+        #Creates the log file
         logging.basicConfig(filename="cookielogs.log", level=logging.INFO)
 
     def create_dat_file(self):
@@ -31,8 +36,9 @@ class FileManager:
         os.chdir(self.path + "/cookie_clicker")
 
     def import_data(self):
-        '''Imports the data from the existing dat file on the folder on the desktop'''
-        logging.info("Locating data")
+        '''Imports the data from the existing dat file on the folder on the desktop,
+        it also logs the information into the log file'''
+        logging.info("Locating data...")
         try:
             os.chdir(self.path + "/cookie_clicker")
             try:
@@ -44,6 +50,7 @@ class FileManager:
                 logging.info("Folder exists, but the file was not found")
                 self.create_dat_file()
                 return ''
+
         except FileNotFoundError:
             logging.info("Folder and dat file does not exist... creating folder and file")
             self.make_directory()

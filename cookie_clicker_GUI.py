@@ -35,16 +35,16 @@ class CookieClickerMainGUI:
         self.upgrade_controller = UpgradesController(data)
         self.root.geometry("700x700")
         self.root.title("Cookie Clicker")
-        self.root.config(bg=self.backround_color)
+        self.root.config(bg=self.background_color)
         self.photo = PhotoImage(data=cookieimage)
-        logging.basicConfig(filename="cookielogs.log", level=logging.INFO)
-        self.path = "C://Users/" + getuser() + "/Desktop/cookie_clicker"
-        os.chdir(self.path)
+        logging.basicConfig(filename="GUIlogs.log", level=logging.INFO)
+        #Closing protocol
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         #MENU BAR STUFF
         self.menu_bar = Menu(self.root)
         self.change_color_menu = Menu(self.menu_bar)
         self.menu_bar.add_cascade(label="Customize", menu=self.change_color_menu)
-        self.menu_bar.add_command("Customize Background", command=self.change_color_menu)
+        self.menu_bar.add_command(label="Customize Background", command=self.choose_color_window)
 
         # Inits the score for the game, will change if .dat file exists
         self.score = self.upgrade_controller.score
@@ -80,6 +80,8 @@ class CookieClickerMainGUI:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         # main loop
         self.root.mainloop()
+        logging.info("Main window loaded successfully...")
+
 
     # ----------------------- IMPORT/EXPORT DATA --------------------------------------------
 
@@ -187,7 +189,7 @@ class CookieClickerMainGUI:
         self.score_label.config(text=str(self.score))
 
     def auto_click(self):
-        '''Sets the autoclick to run, it subtracts the score by 100 times the number of upgrades that the auto_click 
+        '''Sets the autoclick to run, it subtracts the score by 100 times the number of upgrades that the auto_click
         has, it then sets the updatecontroller.auto_click_upgrade += 1'''
 
         self.score -= 100 * self.upgrade_controller.auto_click_upgrade
@@ -200,10 +202,13 @@ class CookieClickerMainGUI:
             self.auto_click_button.pack_forget()
         except:
             pass
+        logging.info("Auto Click Upgrade Purchased by the user")
 
     def random_bonus(self):
-        '''Random bonus of 10,000 cookies, it can only be purchased once, it costs 10,000 cookies, this function is called when the button is pressed,
-        however it does not actaully do the logic of the random cookie, but rather starts a thread so we can use time.sleep without python crashing'''
+        '''Random bonus of 10,000 cookies, it can only be purchased once, it costs 10,000 cookies,
+         this function is called when the button is pressed,
+        however it does not actaully do the logic of the random cookie,
+        but rather starts a thread so we can use time.sleep without python crashing'''
         self.score -= 10000
         self.upgrade_controller.random_bonus_upgrade += 1
         self.score_label.config(text=str(self.score))
@@ -214,6 +219,7 @@ class CookieClickerMainGUI:
             self.random_bonus_button.pack_forget()
         except:
             pass
+        logging.info("Random bonus upgrade Pressed and the thread has been successfully started")
 
     # ----------------------- THREADED FUNCTIONS --------------------------------------------
 
@@ -224,7 +230,8 @@ class CookieClickerMainGUI:
             self.score_label.config(text=str(self.score))
 
     def random_bonus_thread_run(self):
-        '''This is the target of the random_bonus_buttton command that starts the 1% chance of getting 10,000 bonus cookies'''
+        '''This is the target of the random_bonus_buttton command
+        that starts the 1% chance of getting 10,000 bonus cookies every second'''
         while True:
             time.sleep(1)
             if 10 == random.randint(1, 100):
@@ -235,8 +242,8 @@ class CookieClickerMainGUI:
     def on_closing(self):
         '''On the exit, the threads get killed
         https://christopherdavis.me/blog/threading-basics.html'''
-        sys.exit()
-
+        for thread in self.thread_list:
+            thread.join()
 
     # ------------------ Color window
     def choose_color_window(self):
