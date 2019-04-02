@@ -1,3 +1,4 @@
+#sc1341
 from tkinter import Button, Label, Tk, PhotoImage, messagebox, Menu
 from image import image as cookieimage
 import time
@@ -40,12 +41,6 @@ class CookieClickerMainGUI:
         logging.basicConfig(filename="GUIlogs.log", level=logging.INFO)
         #Closing protocol
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        #MENU BAR STUFF
-        self.menu_bar = Menu(self.root)
-        self.change_color_menu = Menu(self.menu_bar)
-        self.menu_bar.add_cascade(label="Customize", menu=self.change_color_menu)
-        self.menu_bar.add_command(label="Customize Background", command=self.choose_color_window)
-
         # Inits the score for the game, will change if .dat file exists
         self.score = self.upgrade_controller.score
         self.auto_click_upgrade = self.upgrade_controller.auto_click_upgrade
@@ -63,9 +58,7 @@ class CookieClickerMainGUI:
         # self.cookie_debt_label = Label(self.root,text="You are in cookie debt",font=("Helvetica", 20))
         self.dark_mode_button = Button(self.root, text="Dark mode", command=self.dark_mode, font=("Helvetica", 10))
         self.light_mode_button = Button(self.root, text="Light mode", command=self.light_mode, font=("Helvetica", 10))
-
-        # import the data
-        self.import_upgrades()
+        self.color_menu_buttton = Button(self.root, text="Color Menu", command=self.choose_color_window, font=("Helvetica", 10))
 
         # pack the widgets inside the screen
         self.score_label.pack()
@@ -75,6 +68,7 @@ class CookieClickerMainGUI:
         self.upgrades_button.pack()
         self.save_button.pack()
         self.dark_mode_button.pack()
+        self.color_menu_buttton.pack()
         logging.info("Screen initialized")
         # Exit protocol
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -82,8 +76,7 @@ class CookieClickerMainGUI:
         self.root.mainloop()
         logging.info("Main window loaded successfully...")
 
-
-    # ----------------------- IMPORT/EXPORT DATA --------------------------------------------
+    # ----------------------- EXPORT DATA --------------------------------------------
 
     def export_data(self):
         '''Exports the data into a dictionary into the dat file that was created from the cookie_clicker.py file'''
@@ -96,20 +89,6 @@ class CookieClickerMainGUI:
             pickle.dump(export_data, f)
         f.close()
         logging.info("Exported data to dat")
-
-    def import_upgrades(self):
-        '''Applies all existing upgrades, it then adds back the cookies that the user gets refunded because they don't have to
-        pay for the upgrade twice'''
-
-        for num in range(int(self.auto_click_upgrade)):
-            self.auto_click()
-            self.score += 100
-        for num in range(int(self.cookies_per_click_upgrade)):
-            self.cookies_per_click()
-            self.score += 20
-        for num in range(int(self.random_bonus_upgrade)):
-            self.random_bonus()
-            self.score += 10000
 
     # ----------------------- Dark mode/light mode --------------------------------------------
 
@@ -231,7 +210,7 @@ class CookieClickerMainGUI:
 
     def random_bonus_thread_run(self):
         '''This is the target of the random_bonus_buttton command
-        that starts the 1% chance of getting 10,000 bonus cookies every second'''
+        that starts the chance of getting 10,000 bonus cookies every second'''
         while True:
             time.sleep(1)
             if 10 == random.randint(1, 100):
@@ -244,8 +223,9 @@ class CookieClickerMainGUI:
         https://christopherdavis.me/blog/threading-basics.html'''
         for thread in self.thread_list:
             thread.join()
+        sys.exit()
 
-    # ------------------ Color window
+    # ------------------ Color window ------------------------------
     def choose_color_window(self):
         """Choose a color for the backround, this automatically disables dark mode by default"""
         self.root3 = Tk()
@@ -254,6 +234,33 @@ class CookieClickerMainGUI:
         #Randomnote self.root.config(bg=colorhere)
         #Backround color vairbale is self.background_color = "white"
         #Widgets
-
+        self.blue_button = Button(self.root3, text="Blue Background", command=self.blue_background).pack()
+        self.orange_button = Button(self.root3, text="Orange Background", command=self.orange_background).pack()
         #Mainloop
         self.root3.mainloop()
+
+    #------------------------color functions -----------------------------------
+
+    def blue_background(self):
+        """Sets the main background to blue and also changes the font color if needed"""
+        self.root.config(bg="blue")
+        self.score_label.config(fg="black", bg="blue")
+        self.save_button.config(fg="black", bg="blue")
+        self.upgrades_button.config(fg="black", bg="blue")
+        self.label.config(fg="black", bg="blue")
+        self.version_label.config(fg="black", bg="blue")
+        self.light_mode_button.config(fg="black", bg="blue")
+        self.color_menu_buttton.config(fg="black", bg="blue")
+        self.dark_mode_button.config(fg="black", bg="blue")
+
+    def orange_background(self):
+        """Sets the main background to orange and also changes the font color if needed"""
+        self.root.config(bg="orange")
+        self.score_label.config(fg="black", bg="orange")
+        self.save_button.config(fg="black", bg="orange")
+        self.upgrades_button.config(fg="black", bg="orange")
+        self.label.config(fg="black", bg="orange")
+        self.version_label.config(fg="black", bg="orange")
+        self.light_mode_button.config(fg="black", bg="orange")
+        self.color_menu_buttton.config(fg="black", bg="orange")
+        self.dark_mode_button.config(fg="black", bg="orange")
