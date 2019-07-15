@@ -1,6 +1,9 @@
 # coded by sc1341
 from tkinter import Button, Label, Tk, PhotoImage, Menu
-from image import image as cookieimage
+try:
+    from image import image as cookieimage
+except:
+    cookieimage = ''
 import time
 import pickle
 import random
