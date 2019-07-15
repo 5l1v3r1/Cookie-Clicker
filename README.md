@@ -1,6 +1,8 @@
 # Cookie-Clicker
 Computer Science Principles sem 1 final exam project
 
+(The Readme has not been updated to the most reccent code)
+
 Structure of the program:
 
 Cookie_clicker.py is the main project where the main function is run. The cookie_clicker_GUI.py file holds the classes we need to make the GUI run on the program. There are two classes stored in there...
