@@ -43,7 +43,6 @@ class FileManager:
             os.chdir(self.path + "/cookie_clicker")
             try:
                 with open("cookie.dat", "rb") as f:
-                    #Errors here???
                     data = pickle.load(f)
                 return data
             except FileNotFoundError:
